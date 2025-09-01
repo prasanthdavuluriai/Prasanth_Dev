@@ -28,20 +28,6 @@ const Experience = () => {
 
   return (
     <section id="experience" className="py-20 bg-slate-900 relative">
-      {/* Background ECU Pattern */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute bottom-0 left-0 w-full h-full opacity-5"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1535136072409-ff0c7a947733')`,
-            backgroundSize: '700px 700px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom left',
-            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(30%)'
-          }}
-        />
-        <div className="absolute inset-0 bg-slate-900/80"></div>
-      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
