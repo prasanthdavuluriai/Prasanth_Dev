@@ -107,37 +107,65 @@ const Skills = () => {
             </p>
           </div>
 
-          {/* Technical Skills */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-gray-100 mb-8">Technical Skills</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {categories.map((category) => {
-                const categorySkills = getSkillsByCategory(category);
-                if (categorySkills.length === 0) return null;
-                
-                return (
-                  <div key={category} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-                    <h4 className="text-cyan-400 font-semibold text-lg mb-4">{category}</h4>
-                    <div className="space-y-4">
-                      {categorySkills.map((skill, index) => (
-                        <SkillBar key={index} skill={skill} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+              <p className="text-slate-300">Loading skills...</p>
             </div>
-          </div>
+          )}
 
-          {/* Domain Expertise */}
-          <div>
-            <h3 className="text-2xl font-bold text-gray-100 mb-8">Domain Expertise</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {skills.domains.map((domain, index) => (
-                <DomainCard key={index} domain={domain} />
-              ))}
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 max-w-md mx-auto">
+                <p className="text-red-400 font-semibold mb-2">Error Loading Skills</p>
+                <p className="text-slate-300 text-sm">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="mt-4 bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400/30 transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Technical Skills */}
+          {skills && !loading && (
+            <>
+              <div className="mb-16">
+                <h3 className="text-2xl font-bold text-gray-100 mb-8">Technical Skills</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {categories.map((category) => {
+                    const categorySkills = getSkillsByCategory(category);
+                    if (categorySkills.length === 0) return null;
+                    
+                    return (
+                      <div key={category} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+                        <h4 className="text-cyan-400 font-semibold text-lg mb-4">{category}</h4>
+                        <div className="space-y-4">
+                          {categorySkills.map((skill, index) => (
+                            <SkillBar key={index} skill={skill} />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Domain Expertise */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-100 mb-8">Domain Expertise</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {skills.domains?.map((domain, index) => (
+                    <DomainCard key={index} domain={domain} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Certifications & Standards */}
           <div className="mt-16 text-center">
