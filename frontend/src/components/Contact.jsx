@@ -34,13 +34,16 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Submit form to backend API
+      await apiService.submitContactMessage(formData);
+      
       toast({
         title: "Message Sent Successfully!",
         description: "Thank you for reaching out. I'll get back to you within 24 hours.",
       });
       
+      // Reset form
       setFormData({
         name: '',
         email: '',
@@ -48,8 +51,17 @@ const Contact = () => {
         message: ''
       });
       
+    } catch (error) {
+      const errorMessage = handleApiError(error, 'Failed to send message. Please try again.');
+      toast({
+        title: "Message Failed to Send",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      console.error('Error submitting contact form:', error);
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const contactMethods = [
