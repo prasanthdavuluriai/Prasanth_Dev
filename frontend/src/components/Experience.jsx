@@ -58,12 +58,37 @@ const Experience = () => {
             </p>
           </div>
 
-          {/* Timeline */}
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-400 to-slate-600"></div>
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+              <p className="text-slate-300">Loading experience...</p>
+            </div>
+          )}
 
-            {experience.map((job, index) => (
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 max-w-md mx-auto">
+                <p className="text-red-400 font-semibold mb-2">Error Loading Experience</p>
+                <p className="text-slate-300 text-sm">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="mt-4 bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400/30 transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Timeline */}
+          {!loading && !error && experience.length > 0 && (
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-400 to-slate-600"></div>
+
+              {experience.map((job, index) => (
               <div key={job.id} className="relative mb-12 last:mb-0">
                 {/* Timeline dot */}
                 <div className="absolute left-6 w-4 h-4 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full border-4 border-slate-900"></div>
