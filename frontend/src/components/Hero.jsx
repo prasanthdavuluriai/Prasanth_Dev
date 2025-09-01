@@ -18,28 +18,8 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-900">
-      {/* Background ECU/Circuit Pattern */}
+      {/* Background ECU/Circuit Pattern - Only Green Highlighted Element */}
       <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1535136072409-ff0c7a947733')`,
-            backgroundSize: '400px 400px',
-            backgroundRepeat: 'repeat',
-            backgroundPosition: 'center',
-            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(50%)'
-          }}
-        />
-        <div 
-          className="absolute top-0 right-0 w-96 h-96 opacity-5"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1535136104956-115a2cd67fc4')`,
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'top right',
-            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(50%)'
-          }}
-        />
         <div 
           className="absolute bottom-0 left-0 w-80 h-80 opacity-5"
           style={{
