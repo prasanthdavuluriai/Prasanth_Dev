@@ -26,20 +26,33 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-b from-purple-900 to-blue-900 relative">
-      <div className="absolute inset-0 bg-black/20"></div>
+    <section id="about" className="py-20 bg-slate-900 relative">
+      {/* Background ECU Pattern */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 opacity-8"
+          style={{
+            backgroundImage: `url('https://images.pexels.com/photos/343457/pexels-photo-343457.jpeg')`,
+            backgroundSize: '600px 600px',
+            backgroundRepeat: 'repeat',
+            backgroundPosition: 'center',
+            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(30%)'
+          }}
+        />
+        <div className="absolute inset-0 bg-slate-900/80"></div>
+      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <div className="inline-block bg-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div className="inline-block bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
               About Me
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Passionate About <span className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">Automotive Innovation</span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-100 mb-6">
+              Passionate About <span className="bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">Automotive Innovation</span>
             </h2>
-            <p className="text-xl text-white/80 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
               With over 6 years of experience in embedded software development, I bridge the gap between cutting-edge technology and real-world automotive solutions.
             </p>
           </div>
@@ -47,7 +60,7 @@ const About = () => {
           {/* Main Content */}
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             {/* Story */}
-            <div className="space-y-6 text-white/90">
+            <div className="space-y-6 text-slate-300">
               <p className="text-lg leading-relaxed">
                 My journey began with a fascination for how software controls the vehicles we depend on every day. From my early days working on Chassis and BCM functionalities to leading complex SDV projects, I've consistently delivered solutions that prioritize both innovation and safety.
               </p>
@@ -61,15 +74,15 @@ const About = () => {
 
             {/* Visual Element */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-orange-400/20 to-purple-600/20 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
+              <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8">
                 <div className="text-center space-y-4">
-                  <div className="w-24 h-24 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span className="text-white font-bold text-2xl">BK</span>
+                  <div className="w-24 h-24 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-slate-900 font-bold text-2xl">BK</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white">Bhavyasri Koduru</h3>
-                  <p className="text-orange-400 font-semibold">Senior Embedded Software Engineer</p>
-                  <div className="pt-4 border-t border-white/10">
-                    <p className="text-white/80 text-sm">
+                  <h3 className="text-2xl font-bold text-gray-100">Bhavyasri Koduru</h3>
+                  <p className="text-cyan-400 font-semibold">Senior Embedded Software Engineer</p>
+                  <div className="pt-4 border-t border-slate-700/50">
+                    <p className="text-slate-300 text-sm">
                       "Building tomorrow's automotive software today"
                     </p>
                   </div>
@@ -83,15 +96,15 @@ const About = () => {
             {highlights.map((highlight, index) => (
               <div 
                 key={index}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300 group"
+                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/70 hover:border-cyan-400/50 transition-all duration-300 group"
               >
                 <div className="flex items-start space-x-4">
-                  <div className="bg-orange-500/20 text-orange-400 p-3 rounded-lg group-hover:bg-orange-500/30 transition-colors">
+                  <div className="bg-cyan-400/20 text-cyan-400 p-3 rounded-lg group-hover:bg-cyan-400/30 transition-colors">
                     {highlight.icon}
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">{highlight.title}</h3>
-                    <p className="text-white/70 leading-relaxed">{highlight.description}</p>
+                    <h3 className="text-gray-100 font-semibold text-lg mb-2">{highlight.title}</h3>
+                    <p className="text-slate-400 leading-relaxed">{highlight.description}</p>
                   </div>
                 </div>
               </div>

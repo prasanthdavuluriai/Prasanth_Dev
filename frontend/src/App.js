@@ -14,7 +14,7 @@ import { Toaster } from "./components/ui/toaster";
 
 const Portfolio = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800">
+    <div className="min-h-screen bg-slate-900">
       <Header />
       <Hero />
       <About />

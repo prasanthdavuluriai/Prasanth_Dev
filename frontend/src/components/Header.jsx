@@ -22,15 +22,15 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">BK</span>
+            <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center">
+              <span className="text-slate-900 font-bold text-lg">BK</span>
             </div>
-            <span className="text-white font-semibold text-xl">Bhavyasri Koduru</span>
+            <span className="text-gray-100 font-semibold text-xl">Bhavyasri Koduru</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -39,12 +39,12 @@ const Header = () => {
               <button
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
-                className="text-white/80 hover:text-white transition-colors duration-300 font-medium"
+                className="text-slate-400 hover:text-cyan-400 transition-colors duration-300 font-medium"
               >
                 {item.label}
               </button>
             ))}
-            <button className="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-orange-500 hover:to-orange-700 transition-all duration-300 flex items-center space-x-2 font-medium">
+            <button className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-slate-900 px-6 py-2 rounded-lg hover:from-cyan-300 hover:to-cyan-500 transition-all duration-300 flex items-center space-x-2 font-medium">
               <Download size={18} />
               <span>Resume</span>
             </button>
@@ -53,7 +53,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-white p-2"
+            className="md:hidden text-gray-100 p-2"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -61,18 +61,18 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-white/10">
+          <div className="md:hidden mt-4 pb-4 border-t border-slate-700/50">
             <nav className="flex flex-col space-y-4 mt-4">
               {navItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-white/80 hover:text-white transition-colors duration-300 font-medium text-left"
+                  className="text-slate-400 hover:text-cyan-400 transition-colors duration-300 font-medium text-left"
                 >
                   {item.label}
                 </button>
               ))}
-              <button className="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-orange-500 hover:to-orange-700 transition-all duration-300 flex items-center space-x-2 font-medium w-fit">
+              <button className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-slate-900 px-6 py-2 rounded-lg hover:from-cyan-300 hover:to-cyan-500 transition-all duration-300 flex items-center space-x-2 font-medium w-fit">
                 <Download size={18} />
                 <span>Resume</span>
               </button>
