@@ -63,20 +63,6 @@ const Testimonials = () => {
 
   return (
     <section id="testimonials" className="py-20 bg-slate-900 relative">
-      {/* Background ECU Pattern */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute center w-full h-full opacity-5"
-          style={{
-            backgroundImage: `url('https://images.pexels.com/photos/343457/pexels-photo-343457.jpeg')`,
-            backgroundSize: '1000px 1000px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(30%)'
-          }}
-        />
-        <div className="absolute inset-0 bg-slate-900/80"></div>
-      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
