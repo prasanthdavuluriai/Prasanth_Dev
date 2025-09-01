@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Award, ArrowRight } from 'lucide-react';
-import { experience } from '../data/mockData';
+import { cachedApiService, handleApiError } from '../services/api';
 
 const Experience = () => {
   return (
