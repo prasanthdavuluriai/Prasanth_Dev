@@ -76,10 +76,14 @@ const Header = () => {
                   {item.label}
                 </button>
               ))}
-              <button className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-slate-900 px-6 py-2 rounded-lg hover:from-cyan-300 hover:to-cyan-500 transition-all duration-300 flex items-center space-x-2 font-medium w-fit">
+              <a 
+                href="/resume.pdf" 
+                download="Bhavyasri_Koduru_Resume.pdf"
+                className="bg-gradient-to-r from-cyan-400 to-cyan-600 text-slate-900 px-6 py-2 rounded-lg hover:from-cyan-300 hover:to-cyan-500 transition-all duration-300 flex items-center space-x-2 font-medium w-fit"
+              >
                 <Download size={18} />
                 <span>Resume</span>
-              </button>
+              </a>
             </nav>
           </div>
         )}
