@@ -1,5 +1,5 @@
-import React from 'react';
-import { skills } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { cachedApiService, handleApiError } from '../services/api';
 
 const Skills = () => {
   const categories = ['Development', 'Architecture', 'Programming', 'Safety', 'Methodology', 'Tools', 'DevOps', 'Testing', 'Communication', 'Management'];
