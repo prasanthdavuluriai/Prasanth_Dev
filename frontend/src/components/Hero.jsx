@@ -11,7 +11,7 @@ const Hero = () => {
 
   const stats = [
     { icon: '🚗', number: '6+', label: 'Years Experience', subtitle: 'Automotive Software' },
-    { icon: '⚡', number: '95%', label: 'Success Rate', subtitle: 'Test Validation' },
+    { icon: '⚡', number: '98%', label: 'Success Rate', subtitle: 'Test Validation' },
     { icon: '🔧', number: '50+', label: 'Projects Delivered', subtitle: 'MBD & Validation' },
     { icon: '🏆', number: '3', label: 'Awards Won', subtitle: 'Client Champion' }
   ];
