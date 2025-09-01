@@ -2,10 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { cachedApiService, handleApiError } from '../services/api';
 
 const Skills = () => {
+  const [skills, setSkills] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
   const categories = ['Development', 'Architecture', 'Programming', 'Safety', 'Methodology', 'Tools', 'DevOps', 'Testing', 'Communication', 'Management'];
   
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        setLoading(true);
+        const skillsData = await cachedApiService.getSkills();
+        setSkills(skillsData);
+        setError(null);
+      } catch (err) {
+        const errorMessage = handleApiError(err, 'Failed to load skills data');
+        setError(errorMessage);
+        console.error('Error fetching skills:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSkills();
+  }, []);
+
   const getSkillsByCategory = (category) => {
-    return skills.technical.filter(skill => skill.category === category);
+    return skills?.technical?.filter(skill => skill.category === category) || [];
   };
 
   const SkillBar = ({ skill }) => (
