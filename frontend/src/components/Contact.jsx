@@ -97,20 +97,6 @@ const Contact = () => {
 
   return (
     <section id="contact" className="py-20 bg-slate-900 relative">
-      {/* Background ECU Pattern */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute bottom-0 right-0 w-full h-full opacity-5"
-          style={{
-            backgroundImage: `url('https://images.pexels.com/photos/459411/pexels-photo-459411.jpeg')`,
-            backgroundSize: '800px 800px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom right',
-            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(30%)'
-          }}
-        />
-        <div className="absolute inset-0 bg-slate-900/80"></div>
-      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
