@@ -3,6 +3,29 @@ import { Calendar, MapPin, Award, ArrowRight } from 'lucide-react';
 import { cachedApiService, handleApiError } from '../services/api';
 
 const Experience = () => {
+  const [experience, setExperience] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchExperience = async () => {
+      try {
+        setLoading(true);
+        const experienceData = await cachedApiService.getExperience();
+        setExperience(experienceData);
+        setError(null);
+      } catch (err) {
+        const errorMessage = handleApiError(err, 'Failed to load experience data');
+        setError(errorMessage);
+        console.error('Error fetching experience:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExperience();
+  }, []);
+
   return (
     <section id="experience" className="py-20 bg-slate-900 relative">
       {/* Background ECU Pattern */}
