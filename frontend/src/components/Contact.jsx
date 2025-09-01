@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Linkedin, Send, Download } from 'lucide-react';
-import { contactInfo } from '../data/mockData';
+import { apiService, handleApiError } from '../services/api';
 import { useToast } from "../hooks/use-toast";
+
+// Contact info (keeping static for now)
+const contactInfo = {
+  email: 'bhavyasreekoduri@gmail.com',
+  phone: '+1-734-447-6301',
+  location: 'Westland, Michigan, 48185',
+  linkedin: 'bhavyasrikoduru',
+  availability: 'Available for new opportunities'
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
