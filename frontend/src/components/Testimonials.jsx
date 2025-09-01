@@ -8,21 +8,21 @@ const Testimonials = () => {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-4 h-4 ${star <= rating ? 'text-orange-400 fill-current' : 'text-white/30'}`}
+          className={`w-4 h-4 ${star <= rating ? 'text-cyan-400 fill-current' : 'text-slate-600'}`}
         />
       ))}
     </div>
   );
 
   const TestimonialCard = ({ testimonial }) => (
-    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:bg-white/10 transition-all duration-300 group h-full flex flex-col">
+    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-8 hover:bg-slate-800/70 hover:border-cyan-400/50 transition-all duration-300 group h-full flex flex-col">
       {/* Quote Icon */}
       <div className="mb-6">
-        <Quote className="w-8 h-8 text-orange-400/60" />
+        <Quote className="w-8 h-8 text-cyan-400/60" />
       </div>
       
       {/* Content */}
-      <p className="text-white/90 leading-relaxed mb-6 flex-1 italic">
+      <p className="text-slate-300 leading-relaxed mb-6 flex-1 italic">
         "{testimonial.content}"
       </p>
       
@@ -32,50 +32,63 @@ const Testimonials = () => {
       </div>
       
       {/* Author */}
-      <div className="flex items-center space-x-4 border-t border-white/10 pt-6">
-        <div className="w-12 h-12 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-sm">
+      <div className="flex items-center space-x-4 border-t border-slate-700/50 pt-6">
+        <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full flex items-center justify-center">
+          <span className="text-slate-900 font-bold text-sm">
             {testimonial.name.split(' ').map(n => n[0]).join('')}
           </span>
         </div>
         <div>
-          <h4 className="text-white font-semibold">{testimonial.name}</h4>
-          <p className="text-orange-400 text-sm">{testimonial.position}</p>
-          <p className="text-white/60 text-sm">{testimonial.company}</p>
+          <h4 className="text-gray-100 font-semibold">{testimonial.name}</h4>
+          <p className="text-cyan-400 text-sm">{testimonial.position}</p>
+          <p className="text-slate-400 text-sm">{testimonial.company}</p>
         </div>
       </div>
     </div>
   );
 
   const AwardCard = ({ award }) => (
-    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300 group text-center">
+    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/70 hover:border-cyan-400/50 transition-all duration-300 group text-center">
       {/* Award Icon */}
-      <div className="w-16 h-16 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-        <span className="text-white font-bold text-2xl">🏆</span>
+      <div className="w-16 h-16 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <span className="text-slate-900 font-bold text-2xl">🏆</span>
       </div>
       
-      <h3 className="text-white font-bold text-lg mb-2">{award.title}</h3>
-      <p className="text-orange-400 font-semibold mb-2">{award.organization}</p>
-      <p className="text-white/60 text-sm mb-4">{award.year}</p>
-      <p className="text-white/80 text-sm leading-relaxed">{award.description}</p>
+      <h3 className="text-gray-100 font-bold text-lg mb-2">{award.title}</h3>
+      <p className="text-cyan-400 font-semibold mb-2">{award.organization}</p>
+      <p className="text-slate-400 text-sm mb-4">{award.year}</p>
+      <p className="text-slate-300 text-sm leading-relaxed">{award.description}</p>
     </div>
   );
 
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-purple-900 to-blue-900 relative">
-      <div className="absolute inset-0 bg-black/20"></div>
+    <section id="testimonials" className="py-20 bg-slate-900 relative">
+      {/* Background ECU Pattern */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute center w-full h-full opacity-5"
+          style={{
+            backgroundImage: `url('https://images.pexels.com/photos/343457/pexels-photo-343457.jpeg')`,
+            backgroundSize: '1000px 1000px',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            filter: 'grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(30%)'
+          }}
+        />
+        <div className="absolute inset-0 bg-slate-900/80"></div>
+      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <div className="inline-block bg-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div className="inline-block bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
               What Others Say
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Testimonials & <span className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">Recognition</span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-100 mb-6">
+              Testimonials & <span className="bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent">Recognition</span>
             </h2>
-            <p className="text-xl text-white/80 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
               Feedback from colleagues, managers, and industry professionals who have witnessed my dedication to excellence.
             </p>
           </div>
@@ -90,8 +103,8 @@ const Testimonials = () => {
           {/* Awards Section */}
           <div>
             <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-white mb-4">Awards & Recognition</h3>
-              <p className="text-white/80 max-w-2xl mx-auto">
+              <h3 className="text-3xl font-bold text-gray-100 mb-4">Awards & Recognition</h3>
+              <p className="text-slate-300 max-w-2xl mx-auto">
                 Professional achievements and recognition received for outstanding performance and innovation in automotive software development.
               </p>
             </div>
@@ -105,28 +118,28 @@ const Testimonials = () => {
 
           {/* Trust Indicators */}
           <div className="mt-16 text-center">
-            <div className="bg-gradient-to-r from-orange-400/10 to-purple-600/10 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
-              <h3 className="text-2xl font-bold text-white mb-6">Why Colleagues Trust My Work</h3>
+            <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-gray-100 mb-6">Why Colleagues Trust My Work</h3>
               <div className="grid md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400 mb-2">100%</div>
-                  <div className="text-white font-semibold">On-Time Delivery</div>
-                  <div className="text-white/60 text-sm mt-1">Project Completion</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">100%</div>
+                  <div className="text-gray-100 font-semibold">On-Time Delivery</div>
+                  <div className="text-slate-400 text-sm mt-1">Project Completion</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400 mb-2">95%</div>
-                  <div className="text-white font-semibold">Test Success Rate</div>
-                  <div className="text-white/60 text-sm mt-1">MIL/SIL Validation</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">95%</div>
+                  <div className="text-gray-100 font-semibold">Test Success Rate</div>
+                  <div className="text-slate-400 text-sm mt-1">MIL/SIL Validation</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400 mb-2">0</div>
-                  <div className="text-white font-semibold">Critical Defects</div>
-                  <div className="text-white/60 text-sm mt-1">Production Releases</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">0</div>
+                  <div className="text-gray-100 font-semibold">Critical Defects</div>
+                  <div className="text-slate-400 text-sm mt-1">Production Releases</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400 mb-2">40%</div>
-                  <div className="text-white font-semibold">Efficiency Gain</div>
-                  <div className="text-white/60 text-sm mt-1">Process Improvement</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">40%</div>
+                  <div className="text-gray-100 font-semibold">Efficiency Gain</div>
+                  <div className="text-slate-400 text-sm mt-1">Process Improvement</div>
                 </div>
               </div>
             </div>
