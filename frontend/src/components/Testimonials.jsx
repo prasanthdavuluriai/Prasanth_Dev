@@ -113,17 +113,17 @@ const Testimonials = () => {
                   <div className="text-slate-400 text-sm mt-1">Project Completion</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">95%</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">98%</div>
                   <div className="text-gray-100 font-semibold">Test Success Rate</div>
                   <div className="text-slate-400 text-sm mt-1">MIL/SIL Validation</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">0</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">10</div>
                   <div className="text-gray-100 font-semibold">Critical Defects</div>
                   <div className="text-slate-400 text-sm mt-1">Production Releases</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">40%</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">60%</div>
                   <div className="text-gray-100 font-semibold">Efficiency Gain</div>
                   <div className="text-slate-400 text-sm mt-1">Process Improvement</div>
                 </div>
