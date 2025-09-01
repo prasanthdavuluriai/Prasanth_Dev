@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Linkedin, Send, Download } from 'lucide-react';
-import { apiService, handleApiError } from '../services/api';
-import { useToast } from "../hooks/use-toast";
+import React from 'react';
+import { Mail, Phone, MapPin, Linkedin, Download } from 'lucide-react';
 
-// Contact info (keeping static for now)
+// Contact info
 const contactInfo = {
   email: 'bhavyasreekoduri@gmail.com',
   phone: '+1-734-447-6301',
@@ -13,56 +11,6 @@ const contactInfo = {
 };
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // Submit form to backend API
-      await apiService.submitContactMessage(formData);
-      
-      toast({
-        title: "Message Sent Successfully!",
-        description: "Thank you for reaching out. I'll get back to you within 24 hours.",
-      });
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      
-    } catch (error) {
-      const errorMessage = handleApiError(error, 'Failed to send message. Please try again.');
-      toast({
-        title: "Message Failed to Send",
-        description: errorMessage,
-        variant: "destructive",
-      });
-      console.error('Error submitting contact form:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const contactMethods = [
     {
