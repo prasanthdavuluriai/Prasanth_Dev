@@ -128,6 +128,9 @@ backend:
         - working: true
           agent: "testing"
           comment: "GET /api/profile endpoint working correctly. Returns complete profile data for Bhavyasri Koduru including name, title (Senior Embedded Software Engineer), email, phone, location, linkedin, bio, and availability status."
+        - working: true
+          agent: "testing"
+          comment: "LINKEDIN PROFILE VERIFICATION COMPLETED: Fixed LinkedIn username from 'bhavyasrikoduru' to 'bhavyasri-k-9b281b12b' as requested. Database updated successfully. Profile endpoint now returns correct LinkedIn username 'bhavyasri-k-9b281b12b'. All profile data verified and working correctly."
 
   - task: "Skills Data Endpoint"
     implemented: true
