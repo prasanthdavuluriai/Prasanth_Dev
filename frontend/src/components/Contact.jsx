@@ -6,7 +6,7 @@ const contactInfo = {
   email: 'bhavyasreekoduri@gmail.com',
   phone: '+1-734-447-6301',
   location: 'Westland, Michigan, 48185',
-  linkedin: 'bhavyasrikoduru',
+  linkedin: 'https://www.linkedin.com/in/bhavyasri-k-9b281b12b/',
   availability: 'Available for new opportunities'
 };
 
