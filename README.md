@@ -106,7 +106,7 @@ Simply upload these files to any static hosting service:
 - **Email**: bhavyasreekoduri@gmail.com
 - **Phone**: +1-734-447-6301
 - **Location**: Westland, Michigan
-- **LinkedIn**: [bhavyasrikoduru](https://linkedin.com/in/bhavyasrikoduru)
+- **LinkedIn**: [bhavyasri-k-9b281b12b](https://www.linkedin.com/in/bhavyasri-k-9b281b12b)
 
 ---
 
