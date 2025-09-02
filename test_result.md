@@ -247,7 +247,7 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "CORS configuration working correctly. All API endpoints accessible from external frontend URL (https://chassis-control-dev.preview.emergentagent.com). No CORS errors encountered during testing."
+          comment: "CORS configuration working correctly. All API endpoints accessible from external frontend URL (https://autotech-profile.preview.emergentagent.com). No CORS errors encountered during testing."
 
   - task: "Error Handling and HTTP Status Codes"
     implemented: true
