@@ -285,7 +285,7 @@ profile_data = {
     "email": "bhavyasreekoduri@gmail.com",
     "phone": "+1-734-447-6301",
     "location": "Westland, Michigan, 48185",
-    "linkedin": "bhavyasrikoduru",
+    "linkedin": "bhavyasri-k-9b281b12b",
     "github": "bhavyasrikoduru",
     "bio": "Experienced Embedded Software Developer with over 6 years...",
     "availability": "Available for new opportunities"
