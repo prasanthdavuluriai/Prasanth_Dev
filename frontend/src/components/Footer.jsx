@@ -13,7 +13,7 @@ const Footer = () => {
     },
     {
       icon: <Linkedin className="w-5 h-5" />,
-      href: `https://linkedin.com/in/${contactInfo.linkedin}`,
+      href: `https://www.linkedin.com/in/bhavyasri-k-9b281b12b`,
       label: 'LinkedIn'
     },
     {
