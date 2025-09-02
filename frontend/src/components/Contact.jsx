@@ -37,8 +37,8 @@ const Contact = () => {
     {
       icon: <Linkedin className="w-6 h-6" />,
       label: 'LinkedIn',
-      value: contactInfo.linkedin,
-      href: `https://linkedin.com/in/${contactInfo.linkedin}`,
+      value: 'bhavyasri-k-9b281b12b',
+      href: contactInfo.linkedin,
       description: 'Connect professionally'
     }
   ];
