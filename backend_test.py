@@ -83,8 +83,13 @@ class PortfolioAPITester:
                 required_fields = ["name", "title", "email", "phone", "location", "linkedin", "bio", "availability"]
                 
                 if all(field in data for field in required_fields):
+                    # Check basic profile data
                     if data["name"] == "Bhavyasri Koduru" and "Embedded" in data["title"]:
-                        self.log_test("Profile Data", True, "Profile endpoint returning correct data", data)
+                        # Specifically check LinkedIn username as requested
+                        if data["linkedin"] == "bhavyasri-k-9b281b12b":
+                            self.log_test("Profile Data", True, f"Profile endpoint returning correct data with LinkedIn username: {data['linkedin']}", data)
+                        else:
+                            self.log_test("Profile Data", False, f"LinkedIn username incorrect. Expected: 'bhavyasri-k-9b281b12b', Got: '{data['linkedin']}'")
                     else:
                         self.log_test("Profile Data", False, f"Profile data doesn't match expected values: {data}")
                 else:
