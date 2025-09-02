@@ -71,7 +71,7 @@ async def seed_database(db):
                 "email": "bhavyasreekoduri@gmail.com",
                 "phone": "+1-734-447-6301",
                 "location": "Westland, Michigan, 48185",
-                "linkedin": "bhavyasrikoduru",
+                "linkedin": "bhavyasri-k-9b281b12b",
                 "github": "bhavyasrikoduru",
                 "bio": "Experienced Embedded Software Developer with over 6 years of comprehensive expertise in automotive software development, validation, and system integration. Proven track record in Model-Based Development (MBD), Chassis Control, Body Control Module (BCM), and Functional Safety across SDV and advanced engineering projects.",
                 "availability": "Available for new opportunities",
