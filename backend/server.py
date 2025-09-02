@@ -155,7 +155,7 @@ async def get_profile():
                 "email": "bhavyasreekoduri@gmail.com",
                 "phone": "+1-734-447-6301",
                 "location": "Westland, Michigan, 48185",
-                "linkedin": "bhavyasrikoduru",
+                "linkedin": "bhavyasri-k-9b281b12b",
                 "github": "bhavyasrikoduru",
                 "bio": "Experienced Embedded Software Developer with over 6 years of comprehensive expertise in automotive software development, validation, and system integration.",
                 "availability": "Available for new opportunities"
