@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the complete backend API functionality for Bhavyasri's portfolio website. The backend should have the following endpoints working: GET /api/health, GET /api/profile, GET /api/skills, GET /api/experience, GET /api/projects, GET /api/projects?category=Model-Based Development, GET /api/testimonials, GET /api/awards, POST /api/contact, GET /api/stats. Expected behavior includes properly structured data, database seeding with default portfolio data, contact form storage in MongoDB, proper error handling, and CORS configuration."
+user_problem_statement: "Build a new professional portfolio for Prasanth Davuluri - Automotive Specialist. Complete replacement of Bhavyasri's portfolio with tech/futuristic design, new sections (About Me, Projects Gallery with tags/filters, Certifications, Testimonials, Contact form with email integration), and features like dark/light mode switching. Backend updated with Prasanth's data from extracted CV. Frontend components being rebuilt with new design and content."
 
 backend:
   - task: "Health Check Endpoint"
