@@ -20,51 +20,88 @@ const Experience = () => {
         const mockExperience = [
           {
             id: 1,
-            company: 'KPIT Technologies',
-            position: 'Senior Software Engineer',
-            duration: 'July 2023 - Jan 2025',
-            location: 'India',
+            company: 'Tata Consultancy Services',
+            position: 'End of Line Validation Engineer',
+            duration: 'July 2021 - Present',
+            location: 'Detroit, Michigan',
             type: 'Full-time',
-            description: 'Led advanced engineering projects in Chassis Development for SDV, specializing in Model-Based Development and CI/CD implementation.',
+            client: 'Stellantis',
+            description: 'Leading powertrain HIL validation and diagnostics validation for end-of-line testing systems at Stellantis.',
             achievements: [
-              'Pioneered Software-in-Loop (SIL) testing using Matrix framework, earning "Star of the Sprint" award',
-              'Successfully rectified Polyspace and SonarQube compliance issues, improving code quality by 40%',
-              'Led defect analysis initiatives, reducing critical bugs by 35% through systematic root cause analysis',
-              'Managed end-to-end CI/CD pipeline implementation using Jenkins and Robot Framework'
+              'Developed comprehensive HIL validation framework for powertrain systems',
+              'Implemented automated diagnostics validation reducing testing time by 40%',
+              'Led end-of-line validation processes for multiple vehicle platforms',
+              'Mentored team of 5 engineers in advanced validation techniques'
             ],
-            technologies: ['MATLAB/Simulink', 'Robot Framework', 'Jenkins', 'Git', 'JIRA', 'Code Beamer']
+            technologies: ['HIL Testing', 'Diagnostics', 'AUTOSAR', 'CAN Protocols', 'Test Automation']
           },
           {
             id: 2,
             company: 'Tata Consultancy Services',
-            position: 'Developer',
-            duration: 'June 2021 - July 2023',
-            location: 'India',
+            position: 'Senior Developer - Body Control Systems',
+            duration: 'August 2021 - June 2025',
+            location: 'Pune, India / Dearborn, Michigan',
             type: 'Full-time',
-            description: 'Developed and validated embedded software for Body Control Module (BCM) with focus on TPMS and Battery Management Systems.',
+            client: 'Ford Motor Company',
+            description: 'Senior role in Ford\'s Vehicle Controls division developing Body Control Module ECUs and software components.',
             achievements: [
-              'Designed comprehensive Functional Specification documents for TPMS and BMS features',
-              'Achieved 95% pass rate in MIL/SIL testing through rigorous test case development',
-              'Implemented ISO 26262-compliant safety measures ensuring ASIL-B compliance',
-              'Delivered multiple releases with zero critical defects, earning "Best Team" award'
+              'Led FS and Model Development for BCM features (Interior/Exterior Lighting, TPMS, ESCL)',
+              'Implemented AUTOSAR and Non-AUTOSAR architecture solutions',
+              'Established CI/CD pipeline with MAB Guidelines, Polyspace, and SonarCube integration',
+              'Delivered FUSA (Functional Safety) compliant feature implementations'
             ],
-            technologies: ['AUTOSAR', 'Simulink/Stateflow', 'ISO 26262', 'MISRA', 'CAN Protocol']
+            technologies: ['MATLAB', 'Simulink', 'AUTOSAR', 'CI/CD', 'Functional Safety', 'Model-Based Development']
           },
           {
             id: 3,
-            company: 'Conneqt Business Solutions',
-            position: 'Engineer',
-            duration: 'Nov 2018 - June 2021',
-            location: 'India',
+            company: 'Tata Consultancy Services',
+            position: 'Senior Developer - Automation Architecture',
+            duration: 'February 2021 - July 2021',
+            location: 'Pune, India',
             type: 'Full-time',
-            description: 'Focused on Chassis and BCM model development, validation, and quality assurance processes.',
+            client: 'Lucid Motors',
+            description: 'Designed and implemented complete automation architecture for Lucid\'s infotainment testing systems.',
             achievements: [
-              'Developed robust Simulink/Stateflow models compliant with MAAB guidelines',
-              'Implemented comprehensive unit-level testing using Model-in-the-Loop techniques',
-              'Conducted thorough IQA and EQA reviews, ensuring 100% compliance with standards',
-              'Established efficient CAN protocol configurations for in-vehicle communication'
+              'Built end-to-end automation framework using NI hardware and LabVIEW',
+              'Developed HMI screen verification, OCR validation, and audio testing capabilities',
+              'Implemented external device connection/disconnection automation',
+              'Integrated Python-based testing framework with Test Stand'
             ],
-            technologies: ['MATLAB/Simulink', 'MAAB Guidelines', 'CAN Protocol', 'Git', 'JIRA']
+            technologies: ['LabVIEW', 'Python', 'NI Hardware', 'Test Stand', 'Automation Framework']
+          },
+          {
+            id: 4,
+            company: 'Tata Consultancy Services',
+            position: 'System Analyst',
+            duration: 'April 2017 - September 2020',
+            location: 'Bangalore, India',
+            type: 'Full-time',
+            client: 'Jaguar Land Rover',
+            description: 'Developed and maintained automation scripts for infotainment systems testing across multiple vehicle platforms.',
+            achievements: [
+              'Managed 5000+ test case suites across different Jaguar Land Rover vehicle platforms',
+              'Built comprehensive automation architecture using LabVIEW and Test Stand',
+              'Implemented feature stability testing with overnight execution capabilities',
+              'Developed automation for HMI verification, OCR, audio validation, and CAN/LIN simulation'
+            ],
+            technologies: ['LabVIEW', 'Test Stand', 'CAN/LIN', 'HMI Testing', 'Automation']
+          },
+          {
+            id: 5,
+            company: 'Wipro Technologies',
+            position: 'Senior Test Engineer',
+            duration: 'December 2011 - April 2017',
+            location: 'Bangalore, India',
+            type: 'Full-time',
+            client: 'Panasonic Automotive Systems EU',
+            description: 'Specialized in automotive infotainment testing for Ford Sync Gen 3, Mercedes NTG, and VW Group platforms.',
+            achievements: [
+              'Led testing for Ford Sync Gen 3 and AHU diagnostics modules (UDS protocol)',
+              'Developed comprehensive test cases for connectivity modules including Apple CarPlay, Android Auto',
+              'Implemented dual phone handling and Baidu app testing for Asian markets',
+              'Managed pre-integration testing and factory build processes for AUDI, SEAT, SKODA & VW platforms'
+            ],
+            technologies: ['UDS Diagnostics', 'Apple CarPlay', 'Android Auto', 'CAN Protocols', 'Test Automation']
           }
         ];
         setExperience(mockExperience);
