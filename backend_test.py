@@ -152,12 +152,20 @@ class PortfolioAPITester:
                     )
                     
                     if valid_experiences:
-                        # Check if KPIT Technologies is present (most recent experience)
-                        kpit_found = any(exp["company"] == "KPIT Technologies" for exp in data)
-                        if kpit_found:
-                            self.log_test("Experience Data", True, f"Experience endpoint working correctly - {len(data)} experiences found", data)
+                        # Check for TCS experiences with automotive clients (Ford, Stellantis, Lucid Motors, JLR)
+                        companies = [exp["company"] for exp in data]
+                        clients = []
+                        for exp in data:
+                            if "client" in exp and exp["client"]:
+                                clients.append(exp["client"])
+                        
+                        automotive_clients = ["Ford Motor Company", "Stellantis", "Lucid Motors", "Jaguar Land Rover"]
+                        found_clients = [client for client in automotive_clients if client in clients]
+                        
+                        if "Tata Consultancy Services" in companies and len(found_clients) >= 2:
+                            self.log_test("Experience Data", True, f"Experience endpoint working correctly - TCS with automotive clients: {found_clients}", data)
                         else:
-                            self.log_test("Experience Data", False, f"Expected KPIT Technologies not found in experiences: {[exp['company'] for exp in data]}")
+                            self.log_test("Experience Data", False, f"Missing expected TCS automotive experience. Companies: {companies}, Clients: {clients}")
                     else:
                         self.log_test("Experience Data", False, f"Invalid experience structure in data: {data}")
                 else:
