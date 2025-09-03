@@ -15,9 +15,60 @@ const Experience = () => {
         setExperience(experienceData);
         setError(null);
       } catch (err) {
-        const errorMessage = handleApiError(err, 'Failed to load experience data');
-        setError(errorMessage);
-        console.error('Error fetching experience:', err);
+        console.warn('API unavailable, falling back to mock data:', err);
+        // Fallback to mock data when API is not available (static deployment)
+        const mockExperience = [
+          {
+            id: 1,
+            company: 'KPIT Technologies',
+            position: 'Senior Software Engineer',
+            duration: 'July 2023 - Jan 2025',
+            location: 'India',
+            type: 'Full-time',
+            description: 'Led advanced engineering projects in Chassis Development for SDV, specializing in Model-Based Development and CI/CD implementation.',
+            achievements: [
+              'Pioneered Software-in-Loop (SIL) testing using Matrix framework, earning "Star of the Sprint" award',
+              'Successfully rectified Polyspace and SonarQube compliance issues, improving code quality by 40%',
+              'Led defect analysis initiatives, reducing critical bugs by 35% through systematic root cause analysis',
+              'Managed end-to-end CI/CD pipeline implementation using Jenkins and Robot Framework'
+            ],
+            technologies: ['MATLAB/Simulink', 'Robot Framework', 'Jenkins', 'Git', 'JIRA', 'Code Beamer']
+          },
+          {
+            id: 2,
+            company: 'Tata Consultancy Services',
+            position: 'Developer',
+            duration: 'June 2021 - July 2023',
+            location: 'India',
+            type: 'Full-time',
+            description: 'Developed and validated embedded software for Body Control Module (BCM) with focus on TPMS and Battery Management Systems.',
+            achievements: [
+              'Designed comprehensive Functional Specification documents for TPMS and BMS features',
+              'Achieved 95% pass rate in MIL/SIL testing through rigorous test case development',
+              'Implemented ISO 26262-compliant safety measures ensuring ASIL-B compliance',
+              'Delivered multiple releases with zero critical defects, earning "Best Team" award'
+            ],
+            technologies: ['AUTOSAR', 'Simulink/Stateflow', 'ISO 26262', 'MISRA', 'CAN Protocol']
+          },
+          {
+            id: 3,
+            company: 'Conneqt Business Solutions',
+            position: 'Engineer',
+            duration: 'Nov 2018 - June 2021',
+            location: 'India',
+            type: 'Full-time',
+            description: 'Focused on Chassis and BCM model development, validation, and quality assurance processes.',
+            achievements: [
+              'Developed robust Simulink/Stateflow models compliant with MAAB guidelines',
+              'Implemented comprehensive unit-level testing using Model-in-the-Loop techniques',
+              'Conducted thorough IQA and EQA reviews, ensuring 100% compliance with standards',
+              'Established efficient CAN protocol configurations for in-vehicle communication'
+            ],
+            technologies: ['MATLAB/Simulink', 'MAAB Guidelines', 'CAN Protocol', 'Git', 'JIRA']
+          }
+        ];
+        setExperience(mockExperience);
+        setError(null);
       } finally {
         setLoading(false);
       }
