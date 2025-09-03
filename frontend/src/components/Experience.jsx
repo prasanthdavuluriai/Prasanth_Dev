@@ -235,19 +235,19 @@ const Experience = () => {
           {/* Career Progression Stats */}
           <div className="mt-16 grid md:grid-cols-3 gap-6">
             <div className="text-center bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-              <div className="text-3xl font-bold text-cyan-400 mb-2">6+</div>
+              <div className="text-3xl font-bold text-cyan-400 mb-2">13+</div>
               <div className="text-gray-100 font-semibold">Years Experience</div>
-              <div className="text-slate-400 text-sm mt-1">Automotive Software</div>
+              <div className="text-slate-400 text-sm mt-1">Automotive Embedded Systems</div>
             </div>
             <div className="text-center bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-              <div className="text-3xl font-bold text-cyan-400 mb-2">3</div>
-              <div className="text-gray-100 font-semibold">Major Companies</div>
-              <div className="text-slate-400 text-sm mt-1">Leading Tech Firms</div>
+              <div className="text-3xl font-bold text-cyan-400 mb-2">8+</div>
+              <div className="text-gray-100 font-semibold">Major Clients</div>
+              <div className="text-slate-400 text-sm mt-1">Ford, Stellantis, Lucid, JLR</div>
             </div>
             <div className="text-center bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-              <div className="text-3xl font-bold text-cyan-400 mb-2">50+</div>
-              <div className="text-gray-100 font-semibold">Projects Delivered</div>
-              <div className="text-slate-400 text-sm mt-1">Production Ready</div>
+              <div className="text-3xl font-bold text-cyan-400 mb-2">5000+</div>
+              <div className="text-gray-100 font-semibold">Tests Automated</div>
+              <div className="text-slate-400 text-sm mt-1">Validation & Testing</div>
             </div>
           </div>
         </div>
