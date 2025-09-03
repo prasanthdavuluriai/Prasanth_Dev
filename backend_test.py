@@ -343,6 +343,42 @@ class PortfolioAPITester:
         except Exception as e:
             self.log_test("Contact Form Submission", False, f"Exception occurred: {str(e)}")
     
+    def test_certifications_endpoint(self):
+        """Test GET /api/certifications endpoint"""
+        try:
+            response = self.make_request("GET", "/certifications")
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if isinstance(data, list) and len(data) > 0:
+                    required_fields = ["id", "title", "issuer", "date", "description", "category"]
+                    
+                    valid_certifications = all(
+                        all(field in cert for field in required_fields) for cert in data
+                    )
+                    
+                    if valid_certifications:
+                        # Check for MathWorks, Udemy, TCS certifications
+                        issuers = [cert["issuer"] for cert in data]
+                        mathworks_cert = "MathWorks" in issuers
+                        udemy_cert = "Udemy" in issuers
+                        tcs_cert = "TCS" in issuers
+                        
+                        if mathworks_cert and udemy_cert:
+                            self.log_test("Certifications Data", True, f"Certifications endpoint working correctly - MathWorks and Udemy certifications found: {issuers}", data)
+                        else:
+                            self.log_test("Certifications Data", True, f"Certifications endpoint working correctly - {len(data)} certifications from: {issuers}", data)
+                    else:
+                        self.log_test("Certifications Data", False, f"Invalid certification structure in data: {data}")
+                else:
+                    self.log_test("Certifications Data", False, f"Certifications data is not a valid list: {data}")
+            else:
+                self.log_test("Certifications Data", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Certifications Data", False, f"Exception occurred: {str(e)}")
+
     def test_stats_endpoint(self):
         """Test GET /api/stats endpoint"""
         try:
