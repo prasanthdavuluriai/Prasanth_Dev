@@ -185,14 +185,24 @@ class PortfolioAPITester:
                 data = response.json()
                 
                 if isinstance(data, list) and len(data) > 0:
-                    required_fields = ["id", "title", "category", "description", "technologies", "features", "status", "timeline", "impact"]
+                    required_fields = ["id", "title", "category", "description", "technologies", "features", "status", "timeline", "client"]
                     
                     valid_projects = all(
                         all(field in project for field in required_fields) for project in data
                     )
                     
                     if valid_projects:
-                        self.log_test("Projects Data", True, f"Projects endpoint working correctly - {len(data)} projects found", data)
+                        # Check for automotive projects (Ford BCM, Stellantis HIL, Lucid automation)
+                        project_titles = [project["title"] for project in data]
+                        automotive_keywords = ["Ford", "Stellantis", "Lucid", "BCM", "HIL", "Jaguar"]
+                        
+                        automotive_projects = [title for title in project_titles 
+                                             if any(keyword in title for keyword in automotive_keywords)]
+                        
+                        if len(automotive_projects) >= 3:
+                            self.log_test("Projects Data", True, f"Projects endpoint working correctly - {len(data)} projects with automotive focus: {automotive_projects}", data)
+                        else:
+                            self.log_test("Projects Data", False, f"Missing automotive projects. Found: {automotive_projects}")
                     else:
                         self.log_test("Projects Data", False, f"Invalid project structure in data: {data}")
                 else:
