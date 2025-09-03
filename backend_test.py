@@ -107,24 +107,29 @@ class PortfolioAPITester:
             if response.status_code == 200:
                 data = response.json()
                 
-                if "technical" in data and "domains" in data:
-                    technical_skills = data["technical"]
-                    domains = data["domains"]
+                if isinstance(data, list) and len(data) > 0:
+                    required_fields = ["name", "level", "category", "yearsExperience"]
                     
-                    if isinstance(technical_skills, list) and isinstance(domains, list):
-                        # Check technical skills structure
-                        if technical_skills and all("name" in skill and "level" in skill and "category" in skill for skill in technical_skills):
-                            # Check domains structure
-                            if domains and all("name" in domain and "expertise" in domain for domain in domains):
-                                self.log_test("Skills Data", True, f"Skills endpoint working correctly - {len(technical_skills)} technical skills, {len(domains)} domains", data)
-                            else:
-                                self.log_test("Skills Data", False, f"Invalid domains structure: {domains}")
+                    # Check skills structure
+                    valid_skills = all(
+                        all(field in skill for field in required_fields) for skill in data
+                    )
+                    
+                    if valid_skills:
+                        # Check for automotive-specific skills
+                        skill_names = [skill["name"] for skill in data]
+                        automotive_skills = ["MATLAB/Simulink", "AUTOSAR", "Model-Based Development", "MIL/SIL/HIL Testing", "CAN/LIN Protocols"]
+                        
+                        found_automotive_skills = [skill for skill in automotive_skills if skill in skill_names]
+                        
+                        if len(found_automotive_skills) >= 3:
+                            self.log_test("Skills Data", True, f"Skills endpoint working correctly - {len(data)} skills with automotive expertise: {found_automotive_skills}", data)
                         else:
-                            self.log_test("Skills Data", False, f"Invalid technical skills structure: {technical_skills}")
+                            self.log_test("Skills Data", False, f"Missing automotive-specific skills. Found: {found_automotive_skills}")
                     else:
-                        self.log_test("Skills Data", False, f"Skills data not in list format: {data}")
+                        self.log_test("Skills Data", False, f"Invalid skills structure in data: {data}")
                 else:
-                    self.log_test("Skills Data", False, f"Missing technical or domains in response: {data}")
+                    self.log_test("Skills Data", False, f"Skills data is not a valid list: {data}")
             else:
                 self.log_test("Skills Data", False, f"HTTP {response.status_code}: {response.text}")
                 
