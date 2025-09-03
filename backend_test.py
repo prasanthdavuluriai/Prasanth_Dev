@@ -80,18 +80,17 @@ class PortfolioAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                required_fields = ["name", "title", "email", "phone", "location", "linkedin", "bio", "availability"]
+                required_fields = ["name", "title", "email", "phone", "location", "linkedin", "bio", "availability", "yearsExperience"]
                 
                 if all(field in data for field in required_fields):
-                    # Check basic profile data
-                    if data["name"] == "Bhavyasri Koduru" and "Embedded" in data["title"]:
-                        # Specifically check LinkedIn username as requested
-                        if data["linkedin"] == "bhavyasri-k-9b281b12b":
-                            self.log_test("Profile Data", True, f"Profile endpoint returning correct data with LinkedIn username: {data['linkedin']}", data)
-                        else:
-                            self.log_test("Profile Data", False, f"LinkedIn username incorrect. Expected: 'bhavyasri-k-9b281b12b', Got: '{data['linkedin']}'")
+                    # Check Prasanth Davuluri's profile data
+                    if (data["name"] == "Prasanth Davuluri" and 
+                        "Automotive" in data["title"] and 
+                        "Westland, Michigan" in data["location"] and
+                        data["yearsExperience"] == 13):
+                        self.log_test("Profile Data", True, f"Profile endpoint returning correct Prasanth Davuluri data: {data['name']}, {data['title']}, {data['location']}", data)
                     else:
-                        self.log_test("Profile Data", False, f"Profile data doesn't match expected values: {data}")
+                        self.log_test("Profile Data", False, f"Profile data doesn't match Prasanth Davuluri's expected values: {data}")
                 else:
                     self.log_test("Profile Data", False, f"Missing required fields in profile: {data}")
             else:
