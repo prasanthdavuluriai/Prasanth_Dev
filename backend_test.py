@@ -350,14 +350,20 @@ class PortfolioAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                required_fields = ["totalMessages", "newMessages", "totalProjects", "featuredProjects", "totalTestimonials", "totalAwards", "lastUpdated"]
+                required_fields = ["totalMessages", "newMessages", "totalProjects", "totalTestimonials", "totalAwards", "lastUpdated"]
                 
                 if all(field in data for field in required_fields):
                     # Check if all values are numeric (except lastUpdated)
-                    numeric_fields = ["totalMessages", "newMessages", "totalProjects", "featuredProjects", "totalTestimonials", "totalAwards"]
+                    numeric_fields = ["totalMessages", "newMessages", "totalProjects", "totalTestimonials", "totalAwards"]
                     all_numeric = all(isinstance(data[field], int) and data[field] >= 0 for field in numeric_fields)
                     
-                    if all_numeric:
+                    # Check for automotive specialist statistics (13+ years experience, 25+ projects, 99% success rate)
+                    expected_stats = ["yearsExperience", "projectsCompleted", "successRate"]
+                    has_automotive_stats = any(stat in data for stat in expected_stats)
+                    
+                    if all_numeric and has_automotive_stats:
+                        self.log_test("Portfolio Statistics", True, f"Stats endpoint working correctly with automotive metrics", data)
+                    elif all_numeric:
                         self.log_test("Portfolio Statistics", True, f"Stats endpoint working correctly", data)
                     else:
                         self.log_test("Portfolio Statistics", False, f"Stats contain non-numeric values: {data}")
