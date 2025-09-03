@@ -1,337 +1,370 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request
+# Prasanth Davuluri Portfolio Backend Server
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from pydantic import BaseModel, Field
+from typing import List, Optional, Any, Dict, Union
 import os
+from datetime import datetime, timezone
+import uuid
 import logging
-from pathlib import Path
-from pydantic import BaseModel, Field, EmailStr
-from typing import List, Optional, Dict
-from datetime import datetime
-from bson import ObjectId
 
+# Import data
+from data.prasanth_data import (
+    DEFAULT_PROFILE, DEFAULT_SKILLS, DEFAULT_EXPERIENCE, 
+    DEFAULT_PROJECTS, DEFAULT_TESTIMONIALS, DEFAULT_CERTIFICATIONS,
+    DEFAULT_AWARDS, DEFAULT_STATS
+)
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(
+    title="Prasanth Davuluri Portfolio API",
+    description="Backend API for Prasanth Davuluri's Professional Portfolio",
+    version="2.0.0"
+)
+
+# CORS Configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace with specific origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+DATABASE_NAME = "prasanth_portfolio"
 
-# Create the main app without a prefix
-app = FastAPI(title="Bhavyasri Portfolio API", version="1.0.0")
-
-# Create a router with the /api prefix
-api_router = APIRouter(prefix="/api")
-
-# Custom JSON Encoder for ObjectId
-class JSONEncoder:
-    @staticmethod
-    def encode_object_id(obj):
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        if isinstance(obj, dict):
-            return {k: JSONEncoder.encode_object_id(v) for k, v in obj.items()}
-        if isinstance(obj, list):
-            return [JSONEncoder.encode_object_id(item) for item in obj]
-        return obj
+client = None
+db = None
 
 # Pydantic Models
-class Skill(BaseModel):
-    name: str
-    level: int = Field(..., ge=0, le=100)
-    category: str
-
-class DomainExpertise(BaseModel):
-    name: str
-    expertise: str  # 'Expert', 'Advanced', 'Intermediate'
-
-class SkillsResponse(BaseModel):
-    technical: List[Skill]
-    domains: List[DomainExpertise]
-
-class Experience(BaseModel):
-    id: Optional[str] = None
-    company: str
-    position: str
-    duration: str
-    location: str
-    type: str
-    description: str
-    achievements: List[str]
-    technologies: List[str]
-    order: Optional[int] = 0
-
-class Project(BaseModel):
-    id: Optional[str] = None
-    title: str
-    category: str
-    description: str
-    technologies: List[str]
-    features: List[str]
-    status: str
-    timeline: str
-    impact: str
-    imageUrl: Optional[str] = None
-    githubUrl: Optional[str] = None
-    liveUrl: Optional[str] = None
-    featured: Optional[bool] = False
-    order: Optional[int] = 0
-
-class Testimonial(BaseModel):
-    id: Optional[str] = None
-    name: str
-    position: str
-    company: str
-    content: str
-    rating: int = Field(..., ge=1, le=5)
-    imageUrl: Optional[str] = None
-    approved: Optional[bool] = True
-    order: Optional[int] = 0
-
-class Award(BaseModel):
-    id: Optional[str] = None
-    title: str
-    organization: str
-    year: str
-    description: str
-    imageUrl: Optional[str] = None
-    order: Optional[int] = 0
-
-class ContactMessage(BaseModel):
-    name: str
-    email: EmailStr
-    subject: str
-    message: str
-
-class ContactMessageResponse(BaseModel):
+class ProfileModel(BaseModel):
     id: str
-    name: str
-    email: str
-    subject: str
-    message: str
-    status: str
-    createdAt: datetime
-
-class Profile(BaseModel):
     name: str
     title: str
     email: str
     phone: str
     location: str
     linkedin: str
-    github: Optional[str] = None
+    github: str
     bio: str
+    yearsExperience: int
     availability: str
-    resumeUrl: Optional[str] = None
-    profileImageUrl: Optional[str] = None
+    tagline: str
+    summary: str
 
-# Health check endpoint
-@api_router.get("/")
-async def root():
-    return {"message": "Bhavyasri Portfolio API", "version": "1.0.0", "status": "active"}
+class SkillModel(BaseModel):
+    name: str
+    level: int
+    category: str
+    yearsExperience: int
 
-@api_router.get("/health")
+class ExperienceModel(BaseModel):
+    id: str
+    company: str
+    position: str
+    location: str
+    duration: str
+    type: str
+    client: Optional[str] = None
+    description: str
+    achievements: List[str]
+    technologies: List[str]
+
+class ProjectModel(BaseModel):
+    id: str
+    title: str
+    category: str
+    description: str
+    longDescription: str
+    technologies: List[str]
+    features: List[str]
+    status: str
+    timeline: str
+    client: str
+    impact: str
+
+class TestimonialModel(BaseModel):
+    id: str
+    name: str
+    position: str
+    company: str
+    content: str
+    rating: int
+    date: str
+    approved: bool
+
+class CertificationModel(BaseModel):
+    id: str
+    title: str
+    issuer: str
+    date: str
+    description: str
+    category: str
+
+class AwardModel(BaseModel):
+    id: str
+    title: str
+    organization: str
+    year: str
+    description: str
+
+class ContactModel(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+    phone: Optional[str] = None
+    company: Optional[str] = None
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database connection and seed data"""
+    global client, db
+    try:
+        client = AsyncIOMotorClient(MONGO_URL)
+        db = client[DATABASE_NAME]
+        
+        # Test connection
+        await db.admin.command('ping')
+        logger.info("Connected to MongoDB successfully")
+        
+        # Seed database with default data
+        await seed_database()
+        logger.info("Database seeded successfully")
+        
+    except Exception as e:
+        logger.error(f"Failed to connect to MongoDB: {e}")
+        raise
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Close database connection"""
+    if client:
+        client.close()
+        logger.info("MongoDB connection closed")
+
+async def seed_database():
+    """Seed database with default portfolio data"""
+    try:
+        # Check if data already exists
+        existing_profile = await db.profile.find_one({"id": DEFAULT_PROFILE["id"]})
+        if existing_profile:
+            logger.info("Database already seeded, skipping...")
+            return
+
+        # Insert default data
+        await db.profile.insert_one(DEFAULT_PROFILE)
+        await db.skills.insert_many(DEFAULT_SKILLS)
+        await db.experience.insert_many(DEFAULT_EXPERIENCE)
+        await db.projects.insert_many(DEFAULT_PROJECTS)
+        await db.testimonials.insert_many(DEFAULT_TESTIMONIALS)
+        await db.certifications.insert_many(DEFAULT_CERTIFICATIONS)
+        await db.awards.insert_many(DEFAULT_AWARDS)
+        
+        logger.info("Default data inserted successfully")
+        
+    except Exception as e:
+        logger.error(f"Error seeding database: {e}")
+
+# API Endpoints
+
+@app.get("/api/health")
 async def health_check():
+    """Health check endpoint"""
     try:
         # Test database connection
-        await db.command("ping")
-        return {"status": "healthy", "database": "connected", "timestamp": datetime.utcnow()}
+        await db.admin.command('ping')
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "service": "Prasanth Davuluri Portfolio API",
+            "version": "2.0.0"
+        }
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
 
-# Profile endpoints
-@api_router.get("/profile", response_model=Profile)
+@app.get("/api/profile", response_model=ProfileModel)
 async def get_profile():
+    """Get profile information"""
     try:
-        profile = await db.profile.find_one()
+        profile = await db.profile.find_one({"id": DEFAULT_PROFILE["id"]})
         if not profile:
-            # Return default profile if none exists
-            default_profile = {
-                "name": "Bhavyasri Koduru",
-                "title": "Senior Embedded Software Engineer",
-                "email": "bhavyasreekoduri@gmail.com",
-                "phone": "+1-734-447-6301",
-                "location": "Westland, Michigan, 48185",
-                "linkedin": "bhavyasri-k-9b281b12b",
-                "github": "bhavyasrikoduru",
-                "bio": "Experienced Embedded Software Developer with over 6 years of comprehensive expertise in automotive software development, validation, and system integration.",
-                "availability": "Available for new opportunities"
-            }
-            return Profile(**default_profile)
+            raise HTTPException(status_code=404, detail="Profile not found")
         
-        # Remove MongoDB _id and convert to Profile model
+        # Remove MongoDB _id field
         profile.pop('_id', None)
-        return Profile(**profile)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch profile: {str(e)}")
-
-# Skills endpoints
-@api_router.get("/skills", response_model=SkillsResponse)
-async def get_skills():
-    try:
-        skills_doc = await db.skills.find_one()
-        if not skills_doc:
-            # Return default skills if none exist in database
-            from data.default_data import get_default_skills
-            return get_default_skills()
+        return ProfileModel(**profile)
         
-        skills_doc.pop('_id', None)
-        return SkillsResponse(**skills_doc)
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch skills: {str(e)}")
+        logger.error(f"Error fetching profile: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-# Experience endpoints
-@api_router.get("/experience", response_model=List[Experience])
-async def get_experience():
+@app.get("/api/skills", response_model=List[SkillModel])
+async def get_skills():
+    """Get all skills"""
     try:
-        experiences = await db.experience.find().sort("order", 1).to_list(100)
-        result = []
-        for exp in experiences:
-            exp['id'] = str(exp.pop('_id'))
-            result.append(Experience(**exp))
-        return result
+        skills = await db.skills.find().to_list(length=None)
+        # Remove MongoDB _id fields
+        for skill in skills:
+            skill.pop('_id', None)
+        return [SkillModel(**skill) for skill in skills]
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch experience: {str(e)}")
+        logger.error(f"Error fetching skills: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-# Projects endpoints
-@api_router.get("/projects", response_model=List[Project])
+@app.get("/api/experience", response_model=List[ExperienceModel])
+async def get_experience():
+    """Get work experience"""
+    try:
+        experience = await db.experience.find().sort("duration", -1).to_list(length=None)
+        # Remove MongoDB _id fields
+        for exp in experience:
+            exp.pop('_id', None)
+        return [ExperienceModel(**exp) for exp in experience]
+        
+    except Exception as e:
+        logger.error(f"Error fetching experience: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/projects", response_model=List[ProjectModel])
 async def get_projects(category: Optional[str] = None):
+    """Get projects, optionally filtered by category"""
     try:
         query = {}
-        if category and category != "All":
+        if category:
             query["category"] = category
             
-        projects = await db.projects.find(query).sort("order", 1).to_list(100)
-        result = []
+        projects = await db.projects.find(query).to_list(length=None)
+        # Remove MongoDB _id fields
         for project in projects:
-            project['id'] = str(project.pop('_id'))
-            result.append(Project(**project))
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch projects: {str(e)}")
-
-# Testimonials endpoints
-@api_router.get("/testimonials", response_model=List[Testimonial])
-async def get_testimonials():
-    try:
-        testimonials = await db.testimonials.find({"approved": True}).sort("order", 1).to_list(100)
-        result = []
-        for testimonial in testimonials:
-            testimonial['id'] = str(testimonial.pop('_id'))
-            result.append(Testimonial(**testimonial))
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch testimonials: {str(e)}")
-
-# Awards endpoints
-@api_router.get("/awards", response_model=List[Award])
-async def get_awards():
-    try:
-        awards = await db.awards.find().sort("order", 1).to_list(100)
-        result = []
-        for award in awards:
-            award['id'] = str(award.pop('_id'))
-            result.append(Award(**award))
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch awards: {str(e)}")
-
-# Contact endpoints
-@api_router.post("/contact", response_model=Dict[str, str])
-async def submit_contact_message(message: ContactMessage, request: Request):
-    try:
-        # Get client info
-        client_ip = request.client.host
-        user_agent = request.headers.get("user-agent", "")
+            project.pop('_id', None)
+        return [ProjectModel(**project) for project in projects]
         
-        # Create message document
-        message_doc = {
-            "name": message.name,
-            "email": message.email,
-            "subject": message.subject,
-            "message": message.message,
-            "status": "new",
-            "ipAddress": client_ip,
-            "userAgent": user_agent,
-            "createdAt": datetime.utcnow(),
-            "updatedAt": datetime.utcnow()
+    except Exception as e:
+        logger.error(f"Error fetching projects: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/testimonials", response_model=List[TestimonialModel])
+async def get_testimonials():
+    """Get approved testimonials"""
+    try:
+        testimonials = await db.testimonials.find({"approved": True}).to_list(length=None)
+        # Remove MongoDB _id fields
+        for testimonial in testimonials:
+            testimonial.pop('_id', None)
+        return [TestimonialModel(**testimonial) for testimonial in testimonials]
+        
+    except Exception as e:
+        logger.error(f"Error fetching testimonials: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/certifications", response_model=List[CertificationModel])
+async def get_certifications():
+    """Get certifications"""
+    try:
+        certifications = await db.certifications.find().sort("date", -1).to_list(length=None)
+        # Remove MongoDB _id fields
+        for cert in certifications:
+            cert.pop('_id', None)
+        return [CertificationModel(**cert) for cert in certifications]
+        
+    except Exception as e:
+        logger.error(f"Error fetching certifications: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/awards", response_model=List[AwardModel])
+async def get_awards():
+    """Get awards and recognitions"""
+    try:
+        awards = await db.awards.find().sort("year", -1).to_list(length=None)
+        # Remove MongoDB _id fields
+        for award in awards:
+            award.pop('_id', None)
+        return [AwardModel(**award) for award in awards]
+        
+    except Exception as e:
+        logger.error(f"Error fetching awards: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.post("/api/contact")
+async def submit_contact(contact: ContactModel):
+    """Submit contact form"""
+    try:
+        # Generate unique ID for the contact submission
+        contact_id = str(uuid.uuid4())
+        
+        contact_data = {
+            "id": contact_id,
+            "name": contact.name,
+            "email": contact.email,
+            "subject": contact.subject,
+            "message": contact.message,
+            "phone": contact.phone,
+            "company": contact.company,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "status": "new"
         }
         
         # Insert into database
-        result = await db.contact_messages.insert_one(message_doc)
+        await db.contacts.insert_one(contact_data)
         
         return {
-            "message": "Message sent successfully",
-            "id": str(result.inserted_id),
+            "message": "Contact form submitted successfully",
+            "id": contact_id,
             "status": "received"
         }
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to submit message: {str(e)}")
+        logger.error(f"Error submitting contact form: {e}")
+        raise HTTPException(status_code=500, detail="Failed to submit contact form")
 
-# Statistics endpoint
-@api_router.get("/stats")
+@app.get("/api/stats")
 async def get_stats():
+    """Get portfolio statistics"""
     try:
+        # Get dynamic stats
+        total_projects = await db.projects.count_documents({})
+        total_testimonials = await db.testimonials.count_documents({"approved": True})
+        total_awards = await db.awards.count_documents({})
+        total_messages = await db.contacts.count_documents({})
+        new_messages = await db.contacts.count_documents({"status": "new"})
+        
         stats = {
-            "totalMessages": await db.contact_messages.count_documents({}),
-            "newMessages": await db.contact_messages.count_documents({"status": "new"}),
-            "totalProjects": await db.projects.count_documents({}),
-            "featuredProjects": await db.projects.count_documents({"featured": True}),
-            "totalTestimonials": await db.testimonials.count_documents({"approved": True}),
-            "totalAwards": await db.awards.count_documents({}),
-            "lastUpdated": datetime.utcnow()
+            **DEFAULT_STATS,
+            "totalProjects": total_projects,
+            "totalTestimonials": total_testimonials,
+            "totalAwards": total_awards,
+            "totalMessages": total_messages,
+            "newMessages": new_messages,
+            "lastUpdated": datetime.now(timezone.utc).isoformat()
         }
+        
         return stats
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch stats: {str(e)}")
+        logger.error(f"Error fetching stats: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-# Error handling middleware
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={"error": exc.detail, "status_code": exc.status_code}
-    )
-
+# Global exception handler
 @app.exception_handler(Exception)
-async def general_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {str(exc)}")
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Global exception handler caught: {exc}")
     return JSONResponse(
         status_code=500,
-        content={"error": "Internal server error", "status_code": 500}
+        content={"detail": "Internal server error occurred"}
     )
 
-# Include the router in the main app
-app.include_router(api_router)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
-# Initialize database with default data on startup
-@app.on_event("startup")
-async def initialize_database():
-    try:
-        from data.seed_data import seed_database
-        await seed_database(db)
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {str(e)}")
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001)
