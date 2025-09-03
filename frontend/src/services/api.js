@@ -1,26 +1,25 @@
 import axios from 'axios';
 
-// Get backend URL from environment variable
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API_BASE_URL = `${BACKEND_URL}/api`;
+// Get backend URL from environment variables
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-// Create axios instance with default configuration
+// Create axios instance with base configuration
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000, // 10 second timeout
+  baseURL: BACKEND_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor for logging and authentication
+// Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(`Making ${config.method?.toUpperCase()} request to: ${config.url}`);
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
-    console.error('Request interceptor error:', error);
+    console.error('API Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -28,203 +27,200 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
-    console.log(`Response from ${response.config.url}:`, response.status);
+    console.log(`API Response: ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    console.error('API Response Error:', error);
     
-    // Handle specific error cases
-    if (error.response?.status === 404) {
-      console.warn('Resource not found:', error.config.url);
+    if (error.code === 'ECONNABORTED') {
+      console.warn('Request timeout - API may be unavailable');
     } else if (error.response?.status >= 500) {
-      console.error('Server error:', error.response.data);
-    } else if (error.code === 'ECONNABORTED') {
-      console.error('Request timeout');
+      console.warn('Server error - API may be experiencing issues');
+    } else if (error.response?.status === 404) {
+      console.warn('Endpoint not found');
     }
     
     return Promise.reject(error);
   }
 );
 
-// Retry function for failed requests
-const retryRequest = async (fn, retries = 2, delay = 1000) => {
-  try {
-    return await fn();
-  } catch (error) {
-    if (retries > 0 && error.response?.status >= 500) {
-      console.log(`Retrying request... ${retries} attempts left`);
-      await new Promise(resolve => setTimeout(resolve, delay));
-      return retryRequest(fn, retries - 1, delay * 2);
-    }
-    throw error;
-  }
-};
-
-// API service functions
+// API service methods
 export const apiService = {
   // Health check
-  async checkHealth() {
-    return retryRequest(() => api.get('/health'));
+  async getHealth() {
+    const response = await api.get('/api/health');
+    return response.data;
   },
 
-  // Profile endpoints
+  // Profile data
   async getProfile() {
-    return retryRequest(() => api.get('/profile'));
+    const response = await api.get('/api/profile');
+    return response.data;
   },
 
-  // Skills endpoints
+  // Skills data
   async getSkills() {
-    return retryRequest(() => api.get('/skills'));
+    const response = await api.get('/api/skills');
+    return response.data;
   },
 
-  // Experience endpoints
+  // Experience data
   async getExperience() {
-    return retryRequest(() => api.get('/experience'));
+    const response = await api.get('/api/experience');
+    return response.data;
   },
 
-  // Projects endpoints
+  // Projects data
   async getProjects(category = null) {
-    const params = category && category !== 'All' ? { category } : {};
-    return retryRequest(() => api.get('/projects', { params }));
+    const url = category ? `/api/projects?category=${encodeURIComponent(category)}` : '/api/projects';
+    const response = await api.get(url);
+    return response.data;
   },
 
-  // Testimonials endpoints
+  // Testimonials data
   async getTestimonials() {
-    return retryRequest(() => api.get('/testimonials'));
+    const response = await api.get('/api/testimonials');
+    return response.data;
   },
 
-  // Awards endpoints
+  // Certifications data
+  async getCertifications() {
+    const response = await api.get('/api/certifications');
+    return response.data;
+  },
+
+  // Awards data
   async getAwards() {
-    return retryRequest(() => api.get('/awards'));
+    const response = await api.get('/api/awards');
+    return response.data;
   },
 
-  // Contact endpoints
-  async submitContactMessage(messageData) {
-    return retryRequest(() => api.post('/contact', messageData));
+  // Contact form submission
+  async submitContact(contactData) {
+    const response = await api.post('/api/contact', contactData);
+    return response.data;
   },
 
-  // Stats endpoints
+  // Portfolio statistics
   async getStats() {
-    return retryRequest(() => api.get('/stats'));
-  },
-};
-
-// Error handling utilities
-export const handleApiError = (error, defaultMessage = 'An unexpected error occurred') => {
-  if (error.response?.data?.error) {
-    return error.response.data.error;
-  } else if (error.message) {
-    return error.message;
-  }
-  return defaultMessage;
-};
-
-// Loading state hook utility
-export const createLoadingState = () => ({
-  loading: false,
-  error: null,
-  data: null,
-});
-
-// API call wrapper with loading state
-export const withLoadingState = async (apiCall, setState) => {
-  setState(prev => ({ ...prev, loading: true, error: null }));
-  
-  try {
-    const response = await apiCall();
-    setState(prev => ({ 
-      ...prev, 
-      loading: false, 
-      data: response.data,
-      error: null 
-    }));
+    const response = await api.get('/api/stats');
     return response.data;
-  } catch (error) {
-    const errorMessage = handleApiError(error);
-    setState(prev => ({ 
-      ...prev, 
-      loading: false, 
-      error: errorMessage 
-    }));
-    throw error;
   }
 };
 
-// Cache management
-const cache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Enhanced error handling utility
+export const handleApiError = (error, fallbackData = null) => {
+  console.error('API Error encountered:', error);
 
-export const getCachedData = (key) => {
-  const cached = cache.get(key);
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return cached.data;
+  // Network or timeout errors
+  if (error.code === 'ECONNABORTED' || error.code === 'NETWORK_ERROR' || !error.response) {
+    console.warn('Network issue detected, using fallback data if available');
+    if (fallbackData) {
+      return fallbackData;
+    }
+    throw new Error('Unable to connect to server. Please check your connection.');
   }
-  return null;
+
+  // Server errors
+  if (error.response?.status >= 500) {
+    console.warn('Server error detected, using fallback data if available');
+    if (fallbackData) {
+      return fallbackData;
+    }
+    throw new Error('Server is experiencing issues. Please try again later.');
+  }
+
+  // Client errors
+  if (error.response?.status >= 400 && error.response?.status < 500) {
+    throw new Error(error.response?.data?.message || 'Request failed. Please check your input.');
+  }
+
+  // Generic error
+  throw new Error('An unexpected error occurred. Please try again.');
 };
 
-export const setCachedData = (key, data) => {
-  cache.set(key, {
-    data,
-    timestamp: Date.now(),
-  });
-};
+// Cached API service for better performance
+class CachedApiService {
+  constructor() {
+    this.cache = new Map();
+    this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+  }
 
-export const clearCache = () => {
-  cache.clear();
-};
+  async getCachedData(key, fetcher, fallbackData = null) {
+    const cached = this.cache.get(key);
+    const now = Date.now();
 
-// Cached API service functions
-export const cachedApiService = {
-  async getSkills() {
-    const cacheKey = 'skills';
-    const cached = getCachedData(cacheKey);
-    if (cached) return cached;
-    
-    const response = await apiService.getSkills();
-    setCachedData(cacheKey, response.data);
-    return response.data;
-  },
+    // Return cached data if still valid
+    if (cached && (now - cached.timestamp) < this.cacheTimeout) {
+      console.log(`Returning cached data for ${key}`);
+      return cached.data;
+    }
 
-  async getExperience() {
-    const cacheKey = 'experience';
-    const cached = getCachedData(cacheKey);
-    if (cached) return cached;
-    
-    const response = await apiService.getExperience();
-    setCachedData(cacheKey, response.data);
-    return response.data;
-  },
+    try {
+      const data = await fetcher();
+      this.cache.set(key, { data, timestamp: now });
+      return data;
+    } catch (error) {
+      console.warn(`Failed to fetch ${key}, attempting fallback:`, error);
+      
+      // Try to return stale cache if available
+      if (cached) {
+        console.log(`Returning stale cached data for ${key}`);
+        return cached.data;
+      }
 
-  async getProjects(category = null) {
-    const cacheKey = `projects_${category || 'all'}`;
-    const cached = getCachedData(cacheKey);
-    if (cached) return cached;
-    
-    const response = await apiService.getProjects(category);
-    setCachedData(cacheKey, response.data);
-    return response.data;
-  },
+      // Return fallback data if provided
+      if (fallbackData) {
+        console.log(`Using fallback data for ${key}`);
+        return fallbackData;
+      }
 
-  async getTestimonials() {
-    const cacheKey = 'testimonials';
-    const cached = getCachedData(cacheKey);
-    if (cached) return cached;
-    
-    const response = await apiService.getTestimonials();
-    setCachedData(cacheKey, response.data);
-    return response.data;
-  },
+      throw error;
+    }
+  }
 
-  async getAwards() {
-    const cacheKey = 'awards';
-    const cached = getCachedData(cacheKey);
-    if (cached) return cached;
-    
-    const response = await apiService.getAwards();
-    setCachedData(cacheKey, response.data);
-    return response.data;
-  },
-};
+  async getProfile(fallbackData) {
+    return this.getCachedData('profile', () => apiService.getProfile(), fallbackData);
+  }
 
-export default api;
+  async getSkills(fallbackData) {
+    return this.getCachedData('skills', () => apiService.getSkills(), fallbackData);
+  }
+
+  async getExperience(fallbackData) {
+    return this.getCachedData('experience', () => apiService.getExperience(), fallbackData);
+  }
+
+  async getProjects(fallbackData, category = null) {
+    const key = `projects${category ? `-${category}` : ''}`;
+    return this.getCachedData(key, () => apiService.getProjects(category), fallbackData);
+  }
+
+  async getTestimonials(fallbackData) {
+    return this.getCachedData('testimonials', () => apiService.getTestimonials(), fallbackData);
+  }
+
+  async getCertifications(fallbackData) {
+    return this.getCachedData('certifications', () => apiService.getCertifications(), fallbackData);
+  }
+
+  async getAwards(fallbackData) {
+    return this.getCachedData('awards', () => apiService.getAwards(), fallbackData);
+  }
+
+  async getStats(fallbackData) {
+    return this.getCachedData('stats', () => apiService.getStats(), fallbackData);
+  }
+
+  clearCache() {
+    this.cache.clear();
+    console.log('API cache cleared');
+  }
+}
+
+// Create cached API service instance
+export const cachedApiService = new CachedApiService();
+
+// Default export
+export default apiService;
