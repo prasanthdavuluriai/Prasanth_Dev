@@ -70,9 +70,21 @@ const Hero = ({ darkMode }) => {
           {/* Profile Image */}
           <div className="relative mx-auto w-32 h-32 md:w-40 md:h-40 mb-8">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse opacity-75"></div>
-            <div className="relative w-full h-full bg-gray-800 rounded-full border-4 border-white/20 flex items-center justify-center overflow-hidden">
-              {/* Placeholder Avatar - Replace with actual image if available */}
-              <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+            <div className="relative w-full h-full bg-gray-800 rounded-full border-4 border-white/20 overflow-hidden">
+              {/* Professional Photo */}
+              <img 
+                src="https://customer-assets.emergentagent.com/job_auto-portfolio/artifacts/lwdgaa76_Prasanth_Photo.jpg"
+                alt="Prasanth Davuluri - Senior Automotive Embedded Systems Engineer"
+                className="w-full h-full object-cover rounded-full"
+                onError={(e) => {
+                  // Fallback to placeholder if image fails to load
+                  e.target.style.display = 'none';
+                  e.target.nextElementSibling.style.display = 'flex';
+                }}
+              />
+              
+              {/* Fallback Avatar (hidden by default) */}
+              <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center" style={{display: 'none'}}>
                 <svg className="w-16 h-16 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
