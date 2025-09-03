@@ -293,7 +293,15 @@ class PortfolioAPITester:
                     )
                     
                     if valid_awards:
-                        self.log_test("Awards Data", True, f"Awards endpoint working correctly - {len(data)} awards found", data)
+                        # Check for Ford and TCS awards
+                        organizations = [award["organization"] for award in data]
+                        ford_awards = any("Ford" in org for org in organizations)
+                        tcs_awards = any("TCS" in org or "Tata Consultancy Services" in org for org in organizations)
+                        
+                        if ford_awards and tcs_awards:
+                            self.log_test("Awards Data", True, f"Awards endpoint working correctly - Ford and TCS awards found: {organizations}", data)
+                        else:
+                            self.log_test("Awards Data", True, f"Awards endpoint working correctly - {len(data)} awards found from: {organizations}", data)
                     else:
                         self.log_test("Awards Data", False, f"Invalid award structure in data: {data}")
                 else:
