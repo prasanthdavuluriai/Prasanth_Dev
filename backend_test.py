@@ -413,7 +413,7 @@ class PortfolioAPITester:
     
     def run_all_tests(self):
         """Run all API tests"""
-        print(f"\n🚀 Starting Backend API Tests for Bhavyasri's Portfolio")
+        print(f"\n🚀 Starting Backend API Tests for Prasanth Davuluri's Automotive Specialist Portfolio")
         print(f"Backend URL: {self.base_url}")
         print("=" * 80)
         
@@ -425,6 +425,7 @@ class PortfolioAPITester:
         self.test_projects_endpoint()
         self.test_projects_by_category()
         self.test_testimonials_endpoint()
+        self.test_certifications_endpoint()
         self.test_awards_endpoint()
         self.test_contact_endpoint()
         self.test_stats_endpoint()
