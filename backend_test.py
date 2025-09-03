@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Bhavyasri's Portfolio Website
+Backend API Test Suite for Prasanth Davuluri's Automotive Specialist Portfolio
 Tests all API endpoints for functionality, data structure, and error handling
 """
 
