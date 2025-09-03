@@ -316,10 +316,12 @@ class PortfolioAPITester:
         """Test POST /api/contact endpoint"""
         try:
             test_contact_data = {
-                "name": "John Doe",
-                "email": "john.doe@example.com",
-                "subject": "Job Opportunity",
-                "message": "Hi Bhavyasri, I came across your portfolio and I'm impressed with your automotive embedded systems expertise. We have an exciting opportunity at our company for a Senior Embedded Software Engineer role. Would you be interested in discussing this further?"
+                "name": "Sarah Johnson",
+                "email": "sarah.johnson@stellantis.com",
+                "subject": "Senior Automotive Engineer Position",
+                "message": "Hi Prasanth, I came across your portfolio and I'm impressed with your automotive embedded systems expertise, especially your work with Ford BCM and Stellantis powertrain validation. We have an exciting opportunity at Stellantis for a Senior Automotive Engineer role focusing on AUTOSAR and HIL testing. Would you be interested in discussing this further?",
+                "company": "Stellantis",
+                "phone": "+1-313-555-0123"
             }
             
             response = self.make_request("POST", "/contact", data=test_contact_data)
