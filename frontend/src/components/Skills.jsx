@@ -16,9 +16,34 @@ const Skills = () => {
         setSkills(skillsData);
         setError(null);
       } catch (err) {
-        const errorMessage = handleApiError(err, 'Failed to load skills data');
-        setError(errorMessage);
-        console.error('Error fetching skills:', err);
+        console.warn('API unavailable, falling back to mock data:', err);
+        // Fallback to mock data when API is not available (static deployment)
+        const mockSkills = {
+          technical: [
+            { name: 'MATLAB/Simulink', level: 95, category: 'Development' },
+            { name: 'Stateflow', level: 90, category: 'Development' },
+            { name: 'AUTOSAR', level: 88, category: 'Architecture' },
+            { name: 'Embedded C', level: 92, category: 'Programming' },
+            { name: 'ISO 26262', level: 85, category: 'Safety' },
+            { name: 'Model-Based Development', level: 95, category: 'Methodology' },
+            { name: 'Git/Version Control', level: 90, category: 'Tools' },
+            { name: 'Jenkins/CI-CD', level: 82, category: 'DevOps' },
+            { name: 'Robot Framework', level: 80, category: 'Testing' },
+            { name: 'CAN Protocol', level: 88, category: 'Communication' },
+            { name: 'dSPACE HIL', level: 78, category: 'Testing' },
+            { name: 'JIRA/Agile', level: 85, category: 'Management' }
+          ],
+          domains: [
+            { name: 'Chassis Control Systems', expertise: 'Expert' },
+            { name: 'Body Control Module (BCM)', expertise: 'Expert' },
+            { name: 'Tire Pressure Monitoring (TPMS)', expertise: 'Advanced' },
+            { name: 'Battery Management Systems', expertise: 'Advanced' },
+            { name: 'Software Defined Vehicles (SDV)', expertise: 'Intermediate' },
+            { name: 'Functional Safety (ASIL)', expertise: 'Expert' }
+          ]
+        };
+        setSkills(mockSkills);
+        setError(null);
       } finally {
         setLoading(false);
       }
