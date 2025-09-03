@@ -132,7 +132,7 @@ async def startup_event():
         db = client[DATABASE_NAME]
         
         # Test connection
-        await db.admin.command('ping')
+        await client.admin.command('ping')
         logger.info("Connected to MongoDB successfully")
         
         # Seed database with default data
