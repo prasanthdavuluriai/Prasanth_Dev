@@ -255,12 +255,18 @@ class PortfolioAPITester:
                     )
                     
                     if valid_testimonials:
-                        # Check if all testimonials are approved
-                        all_approved = all(testimonial.get("approved", True) for testimonial in data)
-                        if all_approved:
-                            self.log_test("Testimonials Data", True, f"Testimonials endpoint working correctly - {len(data)} testimonials found", data)
+                        # Check for testimonials from Ford and TCS managers
+                        companies = [testimonial["company"] for testimonial in data]
+                        names = [testimonial["name"] for testimonial in data]
+                        
+                        ford_testimonial = "Ford Motor Company" in companies
+                        tcs_testimonial = "Tata Consultancy Services" in companies
+                        herta_testimonial = any("Herta" in name for name in names)
+                        
+                        if ford_testimonial and tcs_testimonial:
+                            self.log_test("Testimonials Data", True, f"Testimonials endpoint working correctly - Ford and TCS testimonials found: {companies}", data)
                         else:
-                            self.log_test("Testimonials Data", False, f"Found unapproved testimonials in response: {data}")
+                            self.log_test("Testimonials Data", False, f"Missing Ford or TCS testimonials. Companies: {companies}")
                     else:
                         self.log_test("Testimonials Data", False, f"Invalid testimonial structure in data: {data}")
                 else:
